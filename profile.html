@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profile - EMS</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Internal CSS -->
+    <style>
+        /* Corporate Theme - Dark & Beige */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5dc;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #222;
+            padding: 15px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #d4c7b0 !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #f5f5dc !important;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #d4c7b0 !important;
+        }
+
+        /* Profile Card */
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(212, 199, 176, 0.2);
+            margin-top: 50px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #d4c7b0;
+        }
+
+        label {
+            font-weight: bold;
+            color: #d4c7b0;
+        }
+
+        input, select {
+            background: #2a2a2a;
+            color: white;
+            border: 1px solid #d4c7b0;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #c0b097;
+        }
+
+        /* Buttons */
+        .btn-dark {
+            background: #d4c7b0;
+            color: #1a1a1a;
+            font-weight: bold;
+            border: none;
+            transition: 0.3s;
+            padding: 10px 18px;
+            font-size: 1rem;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .btn-dark:hover {
+            background: #c0b097;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: #d4c7b0;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="admin-dashboard.html">EMS - Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="employees.html">Employees</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="index.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Container -->
+    <div class="container profile-container">
+        <div class="text-center">
+            <img src="images/default-profile.jpg" alt="Profile Picture" class="profile-pic" id="profilePic">
+            <input type="file" id="profilePicInput" class="form-control mt-3" accept="image/*">
+        </div>
+
+        <h3 class="text-center mt-3">Employee Profile</h3>
+
+        <form id="profileForm">
+            <div class="mb-3">
+                <label>Full Name:</label>
+                <input type="text" id="name" class="form-control" value="John Doe">
+            </div>
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" id="email" class="form-control" value="johndoe@email.com" disabled>
+            </div>
+            <div class="mb-3">
+                <label>Phone:</label>
+                <input type="text" id="phone" class="form-control" value="+1234567890">
+            </div>
+            <div class="mb-3">
+                <label>Department:</label>
+                <select id="department" class="form-control">
+                    <option>Software Engineering</option>
+                    <option>Human Resources</option>
+                    <option>Marketing</option>
+                    <option>Finance</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Employment Status:</label>
+                <select id="status" class="form-control">
+                    <option>Active</option>
+                    <option>On Leave</option>
+                    <option>Resigned</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Performance Rating:</label>
+                <input type="number" id="rating" class="form-control" value="4.5" min="1" max="5">
+            </div>
+            <button type="submit" class="btn btn-dark">Save Changes</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Employee Management System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("profileForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Profile updated successfully!");
+        });
+
+        // Profile Picture Upload
+        document.getElementById("profilePicInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("profilePic").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+</body>
+</html>

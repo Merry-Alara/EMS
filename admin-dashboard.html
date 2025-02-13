@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EMS</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Internal CSS -->
+    <style>
+        /* Corporate Theme - Dark & Beige */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5dc;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #222;
+            padding: 15px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #d4c7b0 !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #f5f5dc !important;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #d4c7b0 !important;
+        }
+
+        /* Dashboard */
+        .dashboard-container {
+            padding: 30px;
+        }
+
+        .card {
+            background: #222;
+            color: #f5f5dc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(212, 199, 176, 0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Charts */
+        .chart-container {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: #d4c7b0;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Employee Form */
+        .employee-form {
+            background: #222;
+            color: #f5f5dc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .employee-list {
+            margin-top: 30px;
+        }
+
+        .employee-table td, .employee-table th {
+            color: #f5f5dc;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        /* Smaller Pie Chart */
+        .pie-chart-container {
+            max-width: 250px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="admin-dashboard.html">EMS - Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="employees.html">Employees</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="attendance.html">Attendance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="payroll.html">Payroll</a></li>
+                    <li class="nav-item"><a class="nav-link" href="leave.html">Leave Requests</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="index.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Overview -->
+    <div class="container dashboard-container">
+        <h2 class="text-center">Admin Dashboard</h2>
+        <div class="row my-4">
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>Total Employees</h4>
+                    <h2 id="total-employees">50</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>Active Employees</h4>
+                    <h2 id="active-employees">45</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>Pending Leave Requests</h4>
+                    <h2 id="pending-leaves">5</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Employee Form -->
+        <div class="employee-form">
+            <h4 class="text-center">Add New Employee</h4>
+            <form id="addEmployeeForm">
+                <div class="mb-3">
+                    <label for="employeeName">Full Name</label>
+                    <input type="text" class="form-control" id="employeeName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="employeeEmail">Email</label>
+                    <input type="email" class="form-control" id="employeeEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label for="employeePosition">Position</label>
+                    <input type="text" class="form-control" id="employeePosition" required>
+                </div>
+                <div class="mb-3">
+                    <label for="employeeSalary">Salary</label>
+                    <input type="number" class="form-control" id="employeeSalary" required>
+                </div>
+                <div class="mb-3">
+                    <label for="employeeDepartment">Department</label>
+                    <input type="text" class="form-control" id="employeeDepartment" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Add Employee</button>
+            </form>
+        </div>
+
+        <!-- Employee List -->
+        <div class="employee-list">
+            <h4 class="text-center">Employee List</h4>
+            <table class="table employee-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Position</th>
+                        <th>Salary</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeList"></tbody>
+            </table>
+        </div>
+
+        <!-- Monthly Payroll Pie Chart -->
+        <div class="pie-chart-container">
+            <h4>Monthly Payroll Distribution</h4>
+            <canvas id="payrollPieChart"></canvas>
+        </div>
+
+        <!-- Attendance Overview Bar Chart -->
+        <div class="chart-container mt-4">
+            <h3 class="text-center">Attendance Overview</h3>
+            <canvas id="attendanceChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Employee Management System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Employee List Array
+        let employees = [];
+
+        // Add Employee to the List
+        document.getElementById('addEmployeeForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get employee details from form
+            let name = document.getElementById('employeeName').value;
+            let email = document.getElementById('employeeEmail').value;
+            let position = document.getElementById('employeePosition').value;
+            let salary = document.getElementById('employeeSalary').value;
+            let department = document.getElementById('employeeDepartment').value;
+
+            // Create employee object
+            let newEmployee = {
+                name,
+                email,
+                position,
+                salary,
+                department
+            };
+
+            // Push employee to employees array
+            employees.push(newEmployee);
+
+            // Reset the form
+            document.getElementById('addEmployeeForm').reset();
+
+            // Update the employee list UI
+            updateEmployeeList();
+        });
+
+        // Update Employee List UI
+        function updateEmployeeList() {
+            let employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = ''; // Clear current list
+
+            employees.forEach(emp => {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.name}</td>
+                    <td>${emp.email}</td>
+                    <td>${emp.position}</td>
+                    <td>${emp.salary}</td>
+                    <td>${emp.department}</td>
+                `;
+                employeeList.appendChild(row);
+            });
+        }
+
+        // Monthly Payroll Pie Chart
+        var ctx1 = document.getElementById('payrollPieChart').getContext('2d');
+        var payrollPieChart = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: ['Marketing', 'Sales', 'Development', 'HR', 'Others'],
+                datasets: [{
+                    data: [25000, 40000, 35000, 12000, 15000],
+                    backgroundColor: ['#ff5733', '#33c3ff', '#ffec4d', '#ff8a33', '#33ff57'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Attendance Overview Bar Chart
+        var ctx2 = document.getElementById('attendanceChart').getContext('2d');
+        var attendanceChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Attendance (%)',
+                    data: [95, 88, 92, 85],
+                    backgroundColor: '#34c5eb',
+                    borderColor: '#34c5eb',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
